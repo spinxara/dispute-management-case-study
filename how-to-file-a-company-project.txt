@@ -1,0 +1,200 @@
+How to file a company project as a personal GitHub case study
+============================================================
+
+This pattern matches the KOCOWA CS automation case study in this folder.
+Each company project gets its own private GitHub repo. The README is the
+filing. The company repo stays the source of truth. Do not copy source,
+configs, prompts, or git history into the case-study folder.
+
+
+Folder to make
+--------------
+
+  your-project-case-study/
+    README.md          the write-up people can read
+    NOTICE.md          legal baseline
+    HOW-TO.md          resume bullets and private notes (gitignored)
+    .gitignore
+    images/            optional, dummy or redacted screenshots only
+
+Name the repo after the product, like cs-automation-case-study. Keep it
+private until you (and ideally your manager) have reviewed it. Do not add
+a remote to the company repo.
+
+
+What to write before you open the README
+-----------------------------------------
+
+Answer these in notes first. If you cannot answer one, leave that claim out.
+
+  1. One sentence. What the system does in production, and what it refuses to do.
+  2. Employer and product. Name the company and product on purpose. Leave out
+     hostnames, IPs, field IDs, database names, webhook URLs, and colleagues.
+  3. Your role. What you specified, built, operated, and decided. Do not claim
+     APIs, teams, or metrics you did not own.
+  4. Status. Production, expanding, or internal. Say what is still incomplete.
+  5. Problem. The unsafe or expensive thing that happens if this is done badly.
+  6. What shipped. Concrete pieces a reader can picture (pipeline, console,
+     policy, tests).
+  7. Stack. Languages and systems only. No versions of internal libraries, no
+     secret endpoints.
+  8. Hard constraints. Things the system must never do.
+  9. Two or three deep dives. Each one is a real decision, not a feature list.
+ 10. Outcomes you can defend. Qualitative facts. Skip CSAT, hours saved, or
+     volume tables unless a manager has said those numbers may be public.
+
+
+README sections, in this order
+------------------------------
+
+  1. Title and lead. Product name, one paragraph on what it does, your role
+     and employer, then a line that this repo has no source code and the
+     production system stays in the company repo.
+  2. Status. Honest. "Production, still expanding X" is stronger than
+     "full automation."
+  3. Problem. Volume, risk, and why an unconstrained approach fails.
+  4. Role. What you owned.
+  5. What shipped. Short bullets of real pieces.
+  6. Stack. One line.
+  7. Architecture. A Mermaid diagram, then a numbered flow in words. Add a
+     second diagram only when there are two outcomes (for example reply vs
+     handoff) or two tracks (lookup vs generic answer).
+  8. A small table of ticket or request types, source of truth, and typical
+     outcome, if the product has that kind of routing.
+  9. Hard constraints. A short bullet list.
+ 10. Operator or product surface. Pages, who uses them, and what the browser
+     is allowed to see. Screenshots only if they are dummy or redacted.
+ 11. Deep dives. For each one: Situation, Constraint, What I built, What
+     changed, and an invented walkthrough that does not use a real customer,
+     ticket ID, or email.
+ 12. Engineering decisions. A two-column table: problem, what landed.
+ 13. Outcomes. Only claims you can stand behind in an interview.
+
+
+README skeleton (paste into README.md)
+---------------------------------------
+
+# Product — one-line case study
+
+One paragraph: what it does in production, and what it does not guess or execute.
+
+I designed, built, and operate **Product** at [Company](https://example.com/).
+
+This repository is a **case study only**. It does not contain source code, configs, prompts, or operational data. The production system stays in a private company repository.
+
+**Status:** …
+
+## Problem
+
+## Role
+
+## What shipped
+
+-
+
+## Stack
+
+## Architecture
+
+```mermaid
+flowchart LR
+  In[Input] --> Service[Service]
+  Service --> Decision{Allowed?}
+  Decision -->|yes| Act[Act]
+  Decision -->|no| Handoff[Human handoff]
+```
+
+## Deep dives
+
+### 1. Title
+
+**Situation.**
+
+**Constraint.**
+
+**What I built.**
+
+**What changed.**
+
+## Engineering decisions
+
+| Problem | What landed |
+| --- | --- |
+| | |
+
+## Outcomes
+
+-
+
+
+Files that stay next to the README
+----------------------------------
+
+NOTICE.md
+  State that this is a personal case study of employee work, that no source
+  code is included, that it is not an official company publication, and that
+  tickets, credentials, and internal hostnames are omitted.
+
+HOW-TO.md
+  Resume bullets, LinkedIn length, which deep dives to walk in an interview,
+  and a "what I would do next" list. Gitignore this file. Do not put the
+  roadmap on the README.
+
+.gitignore, at least:
+
+  HOW-TO.md
+  .DS_Store
+  .env
+  .env.*
+  !.env.example
+
+Also ignore the company repo's folders if they could ever land in this
+directory (app/, config/, scripts/, tests/, *.sql, and whatever else that
+product uses).
+
+
+What never goes in the GitHub repo
+----------------------------------
+
+- Source, configs, prompts, knowledge-base text, SQL, .env, or webhook JSON
+  from the company repo
+- A submodule or copied git history from the company remote
+- Customer data, ticket IDs, live console screenshots, internal hostnames,
+  field IDs, or colleague names
+- Exact volume or savings numbers you have not been cleared to publish
+
+Screenshots, if you add them, are dummy or dev data with fake records, placed
+next to the console section, and only after you are comfortable they contain
+nothing internal.
+
+
+Push it
+-------
+
+Create an empty private GitHub repo (no README on GitHub's side), then:
+
+  cd ~/Documents/Personal/Projects/your-project-case-study
+  git init
+  git add README.md NOTICE.md .gitignore images
+  git commit -m "Add personal case study write-up."
+  git remote add origin git@github.com:YOUR_USERNAME/your-project-case-study.git
+  git push -u origin main
+
+HOW-TO.md stays on your machine because it is gitignored.
+
+
+How to reuse the write-up
+-------------------------
+
+Resume
+  3-4 bullets from Role, What shipped, and Outcomes. Same claims as the
+  README, shorter.
+
+LinkedIn
+  5-8 sentences from Problem, Role, and Outcomes.
+
+Interviews
+  Walk the architecture diagram, then two deep dives. If they ask for code,
+  the source is employer-owned.
+
+One repo per project. Same three files every time.
